@@ -18,6 +18,12 @@ $stmt3 = $conn->prepare($query3);
 $stmt3->execute();
 $result_service = $stmt3->fetchAll();
 
+$query4= "SELECT nom_salarie , prenom_salarie FROM `salarie` WHERE id_poste = 14 " ;
+$stmt4 = $conn->prepare($query4);
+$stmt4->execute();
+$result_salarie = $stmt4->fetchAll();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +32,7 @@ $result_service = $stmt3->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./css/output.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>Panel Administrateur</title>
 </head>
 
@@ -41,7 +47,7 @@ $result_service = $stmt3->fetchAll();
                 <h1 class="text-2xl font-bold">Admin Panel</h1>
             </div>
             <nav class="mt-4">
-                <a href="#" class="block py-2 px-4 text-gray-300 hover:bg-gray-800 hover:text-white">Services</a>
+                <a href="service.php" class="block py-2 px-4 text-gray-300 hover:bg-gray-800 hover:text-white">Services</a>
                 <a href="#" class="block py-2 px-4 text-gray-300 hover:bg-gray-800 hover:text-white">Médecins</a>
                 <a href="./formulaire1.php" class="block py-2 px-4 text-gray-300 hover:bg-gray-800 hover:text-white">Pré Admission</a>
             </nav>
@@ -120,13 +126,22 @@ $result_service = $stmt3->fetchAll();
                     </form>
 
                     <!-- Afficher la liste des services existants avec des options de modification et de suppression -->
-                    <div class="mt-8">
-                        <h4 class="text-xl font-semibold mb-4">Liste des médecins ↓</h4>
-                        <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <!-- Exemple d'élément de la liste -->
-                            <!-- Répéter pour chaque service existant -->
+                
                         </ul>
                     </div>
+                    
+                <div class="mt-8">
+                        <h4 class="text-xl font-semibold mb-4">Liste des médecins ↓</h4>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <select id="id_salarie" name="id_salarie" required class="shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <?php
+                            foreach ($result_salarie as $row) {
+                            echo "<option value='" . $row['id_salarie'] . "'>" . $row['nom_salarie'] . "</option>";
+                        };
+
+                        ?>
+                        </select>
+
                 </div>
 
             
