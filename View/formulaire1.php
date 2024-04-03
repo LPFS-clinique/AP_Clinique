@@ -3,18 +3,21 @@ require_once('../Model/config.php');
 global $conn;
 session_start();
 
+var_dump($_SESSION);
+
 session_unset();
-!var_dump($_SESSION);
 
 
-$query = "Select s.nom_salarie , s.id_salarie from medecin m
-          Inner join salarie s on m.id_salarie = s.id_salarie 
-          Where id_poste = 14 ";
+$query = "Select nom_s , id_salarie 
+          FROM salarie
+          Where id_poste = 15";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $result_salarie = $stmt->fetchAll();
 
-$query = "Select num_chambre, type FROM chambre";
+
+
+$query = "Select num_type_chambre, type FROM chambre";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $result_chambre = $stmt->fetchAll();
@@ -79,7 +82,7 @@ if (isset($_SESSION['insert_failed'])) {
                 <select id="medecin" name="medecin" required class="shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <?php
                     foreach ($result_salarie as $row) {
-                        echo "<option value='" . $row['id_salarie'] . "'>" . $row['nom_salarie'] . "</option>";
+                        echo "<option value='" . $row['id_salarie'] . "'>" . $row['nom_s'] . "</option>";
                     };
 
                     ?>
@@ -91,7 +94,7 @@ if (isset($_SESSION['insert_failed'])) {
                 <select id="chambre" name="chambre" required class="shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <?php
                     foreach ($result_chambre as $row) {
-                        echo "<option value='" . $row['num_chambre'] . "'>" . $row['type'] . "</option>";
+                        echo "<option value='" . $row['num_type_chambre'] . "'>" . $row['type'] . "</option>";
                     };
 
                     ?>

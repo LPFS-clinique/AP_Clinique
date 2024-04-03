@@ -1,24 +1,19 @@
 <?php
-require_once('../Model/config.php');
+require_once('./config.php');
 session_start();
 
 global $conn;
 extract($_SESSION);
 
-function executeInsertion($stmt)
+function executeInsertion($conn, $stmt)
 {
-    return $stmt->execute();
+    if ($stmt->execute()) {
+        return $conn->lastInsertId();
+    } else {
+        // Log de l'erreur ou autre action
+        return false;
+    }
 }
-
-// Insertion dans la table `hospitalisation`
-$stmt = $conn->prepare("INSERT INTO `hospitalisation` (date, heure, id_medecin, num_type_chambre, id_type_hospitalisation) VALUES (?, ?, ?, ?, ?)");
-$stmt->bindParam(1, $_SESSION['date_admission']);
-$stmt->bindParam(2, $_SESSION['heure_admission']);
-$stmt->bindParam(3, $_SESSION['medecin']);
-$stmt->bindParam(4, $_SESSION['chambre']);
-$stmt->bindParam(5, $_SESSION['type_hospitalisation']);
-$success = executeInsertion($stmt);
-
 
 // Insertion dans la table `couverture_sociale`
 $stmt = $conn->prepare("INSERT INTO `couverture_sociale` (nom_secu, assure, ald, nom_mutu, num_mutu) VALUES (?, ?, ?, ?, ?)");
@@ -27,93 +22,141 @@ $stmt->bindParam(2, $_SESSION['assure']);
 $stmt->bindParam(3, $_SESSION['ald']);
 $stmt->bindParam(4, $_SESSION['nom_mutu']);
 $stmt->bindParam(5, $_SESSION['num_mutu']);
-$success = $success && executeInsertion($stmt);
+$id_secu = executeInsertion($conn, $stmt);
+if (!$id_secu) {
+    $_SESSION['insert_failed'] = "Erreur lors de l'insertion dans couverture_sociale.";
+    header('Location: ../View/formulaire1.php');
+    exit();
+}
 
+function uploadDocument($file) {
+    if (isset($_FILES[$file]) && $_FILES[$file]['error'] == UPLOAD_ERR_OK) {
+        return file_get_contents($_FILES[$file]['tmp_name']);
+    }
+    return null;
+}
 
-// Insertion dans la table `documents`
 $stmt = $conn->prepare("INSERT INTO `documents` (ci_recto, ci_verso, cv, mutuelle, livret_fam) VALUES (?, ?, ?, ?, ?)");
+$ci_recto = uploadDocument('carte_identite_recto');
+$ci_verso = uploadDocument('carte_identite_verso');
+$cv = uploadDocument('carte_vitale');
+$mutuelle = uploadDocument('carte_mutuelle');
+$livret_fam = uploadDocument('livret_famille');
 
-$ci_recto_content = file_get_contents($_FILES['carte_identite_recto']['tmp_name']);
-var_dump($ci_recto_content);
-$ci_verso_content = file_get_contents($_FILES['carte_identite_verso']['tmp_name']);
-$cv_content = file_get_contents($_FILES['carte_vitale']['tmp_name']);
-$mutuelle_content = file_get_contents($_FILES['carte_mutuelle']['tmp_name']);
-$livret_fam_content = file_get_contents($_FILES['livret_famille']['tmp_name']);
+$stmt->bindParam(1, $ci_recto, PDO::PARAM_LOB);
+$stmt->bindParam(2, $ci_verso, PDO::PARAM_LOB);
+$stmt->bindParam(3, $cv, PDO::PARAM_LOB);
+$stmt->bindParam(4, $mutuelle, PDO::PARAM_LOB);
+$stmt->bindParam(5, $livret_fam, PDO::PARAM_LOB);
 
-// $ci_verso_content = file_get_contents($_FILES["carte_identite_recto"]);
+$id_doc = executeInsertion($conn, $stmt);
+if (!$id_doc) {
+    $_SESSION['insert_failed'] = "Erreur lors de l'insertion dans documents.";
+    header('Location: ../View/formulaire1.php');
+    exit();
+}
 
-$stmt->bindParam(1, $ci_recto_content, PDO::PARAM_LOB);
-$stmt->bindParam(2, $ci_verso_content, PDO::PARAM_LOB);
-$stmt->bindParam(3, $cv_content, PDO::PARAM_LOB);
-$stmt->bindParam(4, $mutuelle_content, PDO::PARAM_LOB);
-$stmt->bindParam(5, $livret_fam_content, PDO::PARAM_LOB);
 
-// Exécution de l'insertion
-$success = $stmt->execute();
-
-// Récupération de l'id du patient
-$id_hosp = $conn->lastInsertId('hospitalisation');
-$id_doc = $conn->lastInsertId('documents');
-$id_secu = $conn->lastInsertId('couverture_sociale');
 
 // Insertion dans la table `patient`
-$stmt2 = $conn->prepare("INSERT INTO `patient`(num_secu, nom_naissance, nom_epouse, prenom, ddn, adresse, cp, ville, mail, num_tel, id_hosp, id_civilite, id_doc, id_secu, id_pays) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt2->bindParam(1, $_SESSION['num_secu']);
-$stmt2->bindParam(2, $_SESSION['nom_naissance_pt']);
-$stmt2->bindParam(3, $_SESSION['nom_epouse']);
-$stmt2->bindParam(4, $_SESSION['prenom_pt']);
-$stmt2->bindParam(5, $_SESSION['date_naissance_pt']);
-$stmt2->bindParam(6, $_SESSION['adresse_pt']);
-$stmt2->bindParam(7, $_SESSION['code_postal_pt']);
-$stmt2->bindParam(8, $_SESSION['ville_pt']);
-$stmt2->bindParam(9, $_SESSION['email_pt']);
-$stmt2->bindParam(10, $_SESSION['telephone_pt']);
-$stmt2->bindParam(11, $id_hosp);
-$stmt2->bindParam(12, $_SESSION['civilite_pt']);
-$stmt2->bindParam(13, $id_doc);
-$stmt2->bindParam(14, $id_secu);
-$stmt2->bindParam(15, $_SESSION['id_pays_pt']);
+$stmt = $conn->prepare("INSERT INTO `patient` (num_secu, nom_naissance_pt, nom_epouse_pt, prenom_pt, ddn_pt, adresse_pt, cp_pt, ville_pt, mail_pt, num_tel_pt, id_civilite, id_doc, id_secu, id_pays) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bindParam(1, $_SESSION['num_secu']);
+$stmt->bindParam(2, $_SESSION['nom_naissance_pt']);
+$stmt->bindParam(3, $_SESSION['nom_epouse']);
+$stmt->bindParam(4, $_SESSION['prenom_pt']);
+$stmt->bindParam(5, $_SESSION['date_naissance_pt']);
+$stmt->bindParam(6, $_SESSION['adresse_pt']);
+$stmt->bindParam(7, $_SESSION['code_postal_pt']);
+$stmt->bindParam(8, $_SESSION['ville_pt']);
+$stmt->bindParam(9, $_SESSION['email_pt']);
+$stmt->bindParam(10, $_SESSION['telephone_pt']);
+$stmt->bindParam(11, $_SESSION['civilite_pt']);
+$stmt->bindParam(12, $id_doc);
+$stmt->bindParam(13, $id_secu);
+$stmt->bindParam(14, $_SESSION['id_pays_pt']);
+$lastid_patient = executeInsertion($conn, $stmt);
+if (!$lastid_patient) {
+    $_SESSION['insert_failed'] = "Erreur lors de l'insertion dans patient.";
+    header('Location: ../View/formulaire1.php');
+    exit();
+}
 
-$success2 = executeInsertion($stmt2);
 
-$success2 = $stmt2->execute();
 
-$lastid_patient = $conn->lastInsertId('patient');
+// Insertion dans la table `hospitalisation`
+$passe = 0; // Définissez cette variable selon votre logique
+$stmt = $conn->prepare("INSERT INTO `hospitalisation` (date, heure, passe, id_medecin, num_type_chambre, id_type_hospitalisation, id_patient) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt->bindParam(1, $_SESSION['date_admission']);
+$stmt->bindParam(2, $_SESSION['heure_admission']);
+$stmt->bindParam(3, $passe);
+$stmt->bindParam(4, $_SESSION['medecin']);
+$stmt->bindParam(5, $_SESSION['chambre']);
+$stmt->bindParam(6, $_SESSION['type_hospitalisation']);
+$stmt->bindParam(7, $lastid_patient);
+if (executeInsertion($conn, $stmt) === false) {
+    $_SESSION['insert_failed'] = "Erreur lors de l'insertion dans hospitalisation.";
+    header('Location: ../View/formulaire1.php');
+    exit();
+}
+
+// Insertion des personnes liées au patient
+// Insertion dans la table `personne`
+$stmt = $conn->prepare("INSERT INTO `personne` (nom_p, prenom_p, adresse_p, num_tel_p, cp_p, ville_p, id_categorie_personne, id_pays, id_civilite) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bindParam(1, $_SESSION['nom_p1']);
+$stmt->bindParam(2, $_SESSION['prenom_p1']);
+$stmt->bindParam(3, $_SESSION['adresse_p1']);
+$stmt->bindParam(4, $_SESSION['num_tel_p1']);
+$stmt->bindParam(5, $_SESSION['codePostal_p1']);
+$stmt->bindParam(6, $_SESSION['ville_p1']);
+$stmt->bindParam(7, $_SESSION['id_categorie_personne_p1']);
+$stmt->bindParam(8, $_SESSION['id_pays_p1']);
+$stmt->bindParam(9, $_SESSION['civilite_p1']);
+    
+$id_personne = executeInsertion($conn, $stmt);
+
+if (!$id_personne) {
+    $_SESSION['insert_failed'] = "Erreur lors de l'insertion d'une personne.";
+    header('Location: ../View/formulaire1.php?enculé1=true');
+    exit();
+}
+$stmt = $conn->prepare("INSERT INTO `personne_patient` (id_personne, id_patient) VALUES (?, ?)");
+$stmt->bindParam(1, $id_personne);
+$stmt->bindParam(2, $lastid_patient);
+
+if (executeInsertion($conn, $stmt) === false) {
+    $_SESSION['insert_failed'] = "Erreur lors de la liaison personne-patient.";
+    header('Location: ../View/formulaire1.php?enculé2=true');
+    exit();
+}
+
 
 
 // Insertion dans la table `personne`
-$stmt3 = $conn->prepare("INSERT INTO `personne` (nom, prenom, adresse, num_tel, cp, ville, id_categorie_personne, id_pays, id_civilite, id_patient) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt3->bindParam(1, $_SESSION['nom_p1']);
-$stmt3->bindParam(2, $_SESSION['prenom_p1']);
-$stmt3->bindParam(3, $_SESSION['adresse_p1']);
-$stmt3->bindParam(4, $_SESSION['num_tel_p1']);
-$stmt3->bindParam(5, $_SESSION['codePostal_p1']);
-$stmt3->bindParam(6, $_SESSION['ville_p1']);
-$stmt3->bindParam(7, $_SESSION['id_categorie_personne_p1']);
-$stmt3->bindParam(8, $_SESSION['id_pays_p1']);
-$stmt3->bindParam(9, $_SESSION['civilite_p1']);
-$stmt3->bindParam(10, $lastid_patient);
-$success3 = executeInsertion($stmt3);
+$stmt = $conn->prepare("INSERT INTO `personne` (nom_p, prenom_p, adresse_p, num_tel_p, cp_p, ville_p, id_categorie_personne, id_pays, id_civilite) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bindParam(1, $_SESSION['nom_p2']);
+$stmt->bindParam(2, $_SESSION['prenom_p2']);
+$stmt->bindParam(3, $_SESSION['adresse_p2']);
+$stmt->bindParam(4, $_SESSION['num_tel_p2']);
+$stmt->bindParam(5, $_SESSION['codePostal_p2']);
+$stmt->bindParam(6, $_SESSION['ville_p2']);
+$stmt->bindParam(7, $_SESSION['id_categorie_personne_p2']);
+$stmt->bindParam(8, $_SESSION['id_pays_p2']);
+$stmt->bindParam(9, $_SESSION['civilite_p2']);
 
+$id_personne = executeInsertion($conn, $stmt);
 
-$stmt3 = $conn->prepare("INSERT INTO `personne` (nom, prenom, adresse, num_tel, cp, ville, id_categorie_personne, id_pays, id_civilite, id_patient) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt3->bindParam(1, $_SESSION['nom_p2']);
-$stmt3->bindParam(2, $_SESSION['prenom_p2']);
-$stmt3->bindParam(3, $_SESSION['adresse_p2']);
-$stmt3->bindParam(4, $_SESSION['num_tel_p2']);
-$stmt3->bindParam(5, $_SESSION['codePostal_p2']);
-$stmt3->bindParam(6, $_SESSION['ville_p2']);
-$stmt3->bindParam(7, $_SESSION['id_categorie_personne_p2']);
-$stmt3->bindParam(8, $_SESSION['id_pays_p2']);
-$stmt3->bindParam(9, $_SESSION['civilite_p2']);
-$stmt3->bindParam(10, $lastid_patient);
-$success3 = $success3 && executeInsertion($stmt3);
-
-
-if ($success && $success2 && $success3) {
-    $_SESSION['insert_success'] = "La pré-admission a bien été effectuée.";
-    header('Location: ../View/pannel.php');
-} else {
-    $_SESSION['insert_failed'] = "Une erreur s'est produite.";
+if (!$id_personne) {
+    $_SESSION['insert_failed'] = "Erreur lors de l'insertion d'une personne.";
     header('Location: ../View/formulaire1.php');
+    exit();
 }
+$stmt = $conn->prepare("INSERT INTO `personne_patient` (id_personne, id_patient) VALUES (?, ?)");
+$stmt->bindParam(1, $id_personne);
+$stmt->bindParam(2, $lastid_patient);
+if (executeInsertion($conn, $stmt) === false) {
+    $_SESSION['insert_failed'] = "Erreur lors de la liaison personne-patient.";
+    header('Location: ../View/formulaire1.php');
+    exit();
+}
+$_SESSION['insert_success'] = "La pré-admission a bien été effectuée.";
+header('Location: ../View/pannel.php');

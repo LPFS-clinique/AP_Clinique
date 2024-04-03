@@ -10,7 +10,7 @@ $stmt = $conn->prepare($query);
 $stmt->execute();
 $result_civilite = $stmt->fetchAll();
 
-$query = "Select id, nom_fr_fr from pays";
+$query = "Select id_pays, nom_fr_fr from pays";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $result_pays = $stmt->fetchAll();
@@ -45,7 +45,7 @@ $result_pays = $stmt->fetchAll();
                         <?php
                         foreach ($result_pays as $row) {
                             $selected = ($row['nom_fr_fr'] == 'France') ? 'selected' : '';
-                            echo "<option value='" . $row['id'] . "' $selected>" . $row['nom_fr_fr'] . "</option>";
+                            echo "<option value='" . $row['id_pays'] . "' $selected>" . $row['nom_fr_fr'] . "</option>";
                         };
                         ?>
                     </select>

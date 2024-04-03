@@ -18,7 +18,7 @@ $stmt3 = $conn->prepare($query3);
 $stmt3->execute();
 $result_service = $stmt3->fetchAll();
 
-$query4= "SELECT nom_salarie , prenom_salarie FROM `salarie` WHERE id_poste = 14 " ;
+$query4= "SELECT nom_s , prenom_s FROM `salarie` WHERE id_poste = 15 " ;
 $stmt4 = $conn->prepare($query4);
 $stmt4->execute();
 $result_salarie = $stmt4->fetchAll();
@@ -136,7 +136,7 @@ $result_salarie = $stmt4->fetchAll();
                         <select id="id_salarie" name="id_salarie" required class="shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <?php
                             foreach ($result_salarie as $row) {
-                            echo "<option value='" . $row['id_salarie'] . "'>" . $row['nom_salarie'] . "</option>";
+                            echo "<option value='" . $row['id_salarie'] . "'>" . $row['nom_s'] . "</option>";
                         };
 
                         ?>

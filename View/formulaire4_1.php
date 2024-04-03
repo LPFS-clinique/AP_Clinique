@@ -14,7 +14,7 @@ function getCivilites($conn)
 
 function getPays($conn)
 {
-    $query = "SELECT id, nom_fr_fr FROM pays";
+    $query = "SELECT id_pays, nom_fr_fr FROM pays";
     $stmt = $conn->prepare($query);
     $stmt->execute();
     return $stmt->fetchAll();
@@ -88,7 +88,7 @@ $result_categorie = getCategorieP($conn);
                         <?php
                         foreach ($result_pays as $row) {
                             $selected = ($row['nom_fr_fr'] == 'France') ? 'selected' : '';
-                            echo "<option value='" . $row['id'] . "' $selected>" . $row['nom_fr_fr'] . "</option>";
+                            echo "<option value='" . $row['id_pays'] . "' $selected>" . $row['nom_fr_fr'] . "</option>";
                         };
                         ?>
                     </select>

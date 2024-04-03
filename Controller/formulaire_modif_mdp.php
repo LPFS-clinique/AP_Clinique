@@ -12,7 +12,6 @@ if (!isset($_SESSION['id_login'])) {
     exit;
 }
 
-// Vérification si le captcha soumis est correct
 var_dump($_SESSION["captcha"]);
 var_dump($captchaUser);
 
@@ -61,7 +60,7 @@ if (password_verify($oldPassword, $newHashedPassword)) {
     if ($stmt2->execute() && $stmt3->execute()) {
         $_SESSION['success'] = "Mot de passe mis à jour avec succès.";
         unset($_SESSION['id_login']);
-        header('Location: ../View/index.php?issou2');
+        header('Location: ../View/index.php');
         exit;
     } else {
         $_SESSION['error'] = "Erreur lors de la mise à jour du mot de passe.";
