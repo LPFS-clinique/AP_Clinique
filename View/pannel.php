@@ -120,8 +120,8 @@ $result_salarie = $stmt4->fetchAll();
                         <br>
                         <br>
                             <button type="submit"name="formulaire1" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Créer</button>
-                            <button type="button" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700">Modifier</button>
-                            <button type="button" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Supprimer</button>
+                            <input type="submit" value="Update" name="update_button2" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700"></input>
+                            <input type="submit" value="Delete" name="delete_button2" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700"></input>
                         </div>
                     </form>
 
