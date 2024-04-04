@@ -7,27 +7,6 @@ function executeInsertion($stmt)
     return $stmt->execute();
 }
 
-/*if (isset($_POST['add_button'])){
-$query= "INSERT INTO `salarie` (mail_s, nom_s, prenom_s, id_poste, id_civilite) VALUES (?, ?, ?, ?, ?)";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(1, $_POST['mail']);
-$stmt->bindParam(2, $_POST['nom_salarie']);
-$stmt->bindParam(3, $_POST['prenom_salarie']);
-$stmt->bindParam(4, $_POST['id_poste']);
-$stmt->bindParam(5, $_POST['id_civilite']);
-$result_salarie = $stmt->fetchAll();
-
-$success1 = executeInsertion($stmt);
-
-$query= "INSERT INTO `medecin` (id_medecin, id_service, id_salarie) VALUES (?, ?, ?)";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(1, $_POST['id_medecin']);
-$stmt->bindParam(2, $_POST['id_service']);
-$stmt->bindParam(3, $_POST['id_salarie']);
-$result_medecin= $stmt->fetchAll();
-
-$success2 = executeInsertion($stmt);*/
-
 if (isset($_POST['add_button'])) {
     $query= "INSERT INTO `salarie` (mail_s, nom_s, prenom_s, id_poste, id_civilite) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
@@ -90,4 +69,3 @@ if ($success) {
 
 
 ?>
-
