@@ -1,22 +1,34 @@
 <?php
 $conn = create_db();
-// Informations de connexion à la base de données du serveur test
-// function create_db()
-// {
-//     $servername = "127.0.0.1";
-//     $username = "root";
-//     $password = "root";
-//     $dbname = "lpfs_cliniquebdd";
+if (!$conn) {
+    die("Impossible de se connecter à la base de données.");
+}
 
 
-// Informations de connexion à la base de données du serveur localhost
+// Informations de connexion à la base de données du serveur test 192.168.5.20
 function create_db()
 {
     $servername = "localhost";
     $username = "root";
-    $password = "";
-    // $dbname = "lpfs_cliniquebdd";
-    $dbname = "test";
+    $password = "root";
+    $dbname = "lpfs_cliniquebdd";
+
+// Informations de connexion à la base de données du serveur prod 192.168.5.21
+// function create_db()
+// {
+//     $servername = "192.168.5.21";
+//     $username = "";
+//     $password = "";
+//     $dbname = "lpfs_cliniquebdd";
+
+
+// Informations de connexion à la base de données du serveur localhost
+// function create_db()
+// {
+//     $servername = "localhost";
+//     $username = "root";
+//     $password = "";
+//     $dbname = "lpfs_cliniquebdd";
 
 
     try {
@@ -32,9 +44,4 @@ function create_db()
         error_log($e->getMessage());
         return null;
     }
-}
-
-$conn = create_db();
-if (!$conn) {
-    die("Impossible de se connecter à la base de données.");
 }

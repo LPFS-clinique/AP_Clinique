@@ -594,7 +594,6 @@ INSERT INTO `pays` (`id_pays`, `code`, `alpha2`, `alpha3`, `nom_en_gb`, `nom_fr_
 
 
 
-SET GLOBAL event_scheduler="ON" 
 
 DELIMITER $$
 --
@@ -609,3 +608,5 @@ END$$
 
 DELIMITER ;
 COMMIT;
+
+SET GLOBAL event_scheduler="ON" 
