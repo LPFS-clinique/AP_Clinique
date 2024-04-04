@@ -8,7 +8,7 @@ $stmt = $conn->prepare($query);
 $stmt->execute();
 $result_civilite = $stmt->fetchAll();
 
-$query2 = "Select * from poste";
+$query2 = "Select * from poste where id_poste=15";
 $stmt2 = $conn->prepare($query2);
 $stmt2->execute();
 $result_poste = $stmt2->fetchAll();
@@ -22,7 +22,6 @@ $query4= "SELECT nom_s , prenom_s FROM `salarie` WHERE id_poste = 15 " ;
 $stmt4 = $conn->prepare($query4);
 $stmt4->execute();
 $result_salarie = $stmt4->fetchAll();
-
 
 ?>
 
@@ -66,18 +65,21 @@ $result_salarie = $stmt4->fetchAll();
                     <br>
                     
                     <form action = "../Controller/insert_salarie.php" method="POST" class="w-full max-w-2xl bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                        <div class="mb-4">
+                    <div class="mb-4">
                             <label for="mail" class="block text-gray-700 text-sm font-bold mb-2">Mail</label>
-                            <input type="mail" id="mail" name="mail" class="w-full p-3 border rounded">
+                            <input type="email" id="mail" name="mail" class="w-full p-3 border rounded" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                         </div>
+
                         <div class="mb-4">
-                            <label for="nom_salarie" class="block text-gray-700 text-sm font-bold mb-2">Nom du salarié</label>
-                            <input type="text" id="nom_salarie" name="nom_salarie" class="w-full p-3 border rounded">
+                          <label for="nom_salarie" class="block text-gray-700 text-sm font-bold mb-2">Nom du salarié</label>
+                          <input type="text" id="nom_salarie" name="nom_salarie" class="w-full p-3 border rounded" pattern="[a-zA-ZÀ-ÿ\s'-]*" required>
                         </div>
+
                         <div class="mb-4">
                             <label for="prenom_salarie" class="block text-gray-700 text-sm font-bold mb-2">Prénom du salarié</label>
-                            <input type="text" id="prenom_salarie" name="prenom_salarie" class="w-full p-3 border rounded">
+                            <input type="text" id="prenom_salarie" name="prenom_salarie" class="w-full p-3 border rounded" pattern="[a-zA-ZÀ-ÿ\s'-]*" required>
                         </div>
+
                         
                         <div class="mb-4">
                             <label for="id_poste" class="block text-gray-700 text-sm font-bold mb-2">Poste du salarié</label>
@@ -119,9 +121,7 @@ $result_salarie = $stmt4->fetchAll();
 
                         <br>
                         <br>
-                            <button type="submit"name="formulaire1" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Créer</button>
-                            <input type="submit" value="Update" name="update_button2" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700"></input>
-                            <input type="submit" value="Delete" name="delete_button2" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700"></input>
+                            <button type="add_button"name="add_button" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Créer</button>
                         </div>
                     </form>
 
@@ -129,18 +129,25 @@ $result_salarie = $stmt4->fetchAll();
                 
                         </ul>
                     </div>
-                    
+
+
+                <form action = "../Controller/insert_salarie.php" method="POST" class="w-full max-w-2xl bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <div class="mt-8">
                         <h4 class="text-xl font-semibold mb-4">Liste des médecins ↓</h4>
                         <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <select id="id_salarie" name="id_salarie" required class="shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <?php
                             foreach ($result_salarie as $row) {
-                            echo "<option value='" . $row['id_salarie'] . "'>" . $row['nom_s'] . "</option>";
+                            echo "<option value='" . $row['nom_s'] . "'>" . $row['nom_s'] . "</option>";
+                            
                         };
 
                         ?>
                         </select>
+                            <input type="submit" value="Update" name="Update" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700"></input>
+                            <input type="submit" value="Delete" name="Delete" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700"></input>
+                    </form>
+                    
 
                 </div>
 
