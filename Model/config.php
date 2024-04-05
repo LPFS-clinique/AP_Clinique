@@ -28,7 +28,7 @@ function create_db()
 //     $servername = "localhost";
 //     $username = "root";
 //     $password = "";
-//     $dbname = "lpfs_cliniquebdd";
+//     $dbname = "test";
 
 
     try {

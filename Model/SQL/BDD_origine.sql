@@ -188,8 +188,24 @@ KEY `FK_2_1` (`id_civilite`),
 CONSTRAINT `FK_30` FOREIGN KEY `FK_2_1` (`id_civilite`) REFERENCES `civilite` (`id_civilite`)
 );
 
-INSERT INTO `salarie` (`id_salarie`, `mail_s`, `nom_s`, `prenom_s`, `id_poste`, `id_civilite`) VALUES
-(1, 'huppe.victor@lpfs.fr', 'Huppe', 'Victor', 1, 1);
+-- INSERT INTO salarie (mail_s, nom_s, prenom_s, id_poste, id_civilite) VALUES
+-- ('huppe.victor@lpfs.fr', 'Huppe', 'Victor', 1, 1),
+-- ('quirion.claude@lpfs.fr', 'Quirion', 'Claude', 2, 1),
+-- ('faure.hugues@lpfs.fr', 'Faure', 'Hugues', 3, 1),
+-- ('marquis.francoise@lpfs.fr', 'Marquis', 'Françoise', 4, 2),
+-- ('covillon.alexandrie@lpfs.fr', 'Covillon', 'Alexandrie', 5, 2),
+-- ('lemort.pierre@lpfs.fr', 'Lemort', 'Pierre', 6, 1),
+-- ('masson.antoine@lpfs.fr', 'Masson', 'Antoine', 7, 1),
+-- ('gousse.marc@lpfs.fr', 'Gousse', 'Marc', 8, 1),
+-- ('parent.roger@lpfs.fr', 'Parent', 'Roger', 9, 1),
+-- ('poirier.sabine@lpfs.fr', 'Poirier', 'Sabine', 10, 2),
+-- ('racine.alexis@lpfs.fr', 'Racine', 'Alexis', 11, 1),
+-- ('guerette.david@lpfs.fr', 'Guerette', 'David', 12, 1),
+-- ('dron.micheline@lpfs.fr', 'Dron', 'Micheline', 13, 2),
+-- ('gregoire.fabienne@lpfs.fr', 'Gregoire', 'Fabienne', 14, 2),
+-- ('delassus.jean-francois@lpfs.fr', 'Delassus', 'Jean-François', 14, 1);
+
+
 
 
 -- ************************************** `medecin`
@@ -207,8 +223,8 @@ KEY `FK_2` (`id_salarie`),
 CONSTRAINT `FK_28_1` FOREIGN KEY `FK_2` (`id_salarie`) REFERENCES `salarie` (`id_salarie`)
 );
 
-INSERT INTO `medecin` (`id_medecin`, `id_service`, `id_salarie`) VALUES
-(1, 3, 1);
+-- INSERT INTO `medecin` (`id_medecin`, `id_service`, `id_salarie`) VALUES
+-- (1, 3, 1);
 
 -- ************************************** `personne`
 DROP TABLE IF EXISTS `personne`;
@@ -251,9 +267,22 @@ KEY `FK_1` (`id_salarie`),
 CONSTRAINT `FK_29` FOREIGN KEY `FK_1` (`id_salarie`) REFERENCES `salarie` (`id_salarie`)
 );
 
--- INSERT INTO `connexion` (`id_connexion`, `identifiant`, `mdp`, `premiere_co`, `mdp_modif`, `id_salarie`) VALUES
--- (1, 'v.huppe', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 1, 1701776617, 1);
-
+-- INSERT INTO connexion (identifiant, mdp, premiere_co, mdp_modif, id_salarie) VALUES
+-- ('v.huppe', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776617, 1),
+-- ('c.quirion', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776618, 2),
+-- ('h.faure', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776619, 3),
+-- ('f.marquis', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776620, 4),
+-- ('a.covillon', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776621, 5),
+-- ('p.lemort', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776622, 6),
+-- ('a.masson', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776623, 7),
+-- ('m.gousse', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776624, 8),
+-- ('r.parent', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776625, 9),
+-- ('s.poirier', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776626, 10),
+-- ('a.racine', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776627, 11),
+-- ('d.guerette', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776628, 12),
+-- ('m.dron', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776629, 13),
+-- ('f.gregoire', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776630, 14),
+-- ('jf.delassus', '$2y$10$B3rAyIUhUXhowcaWojldf.602CJAQNIpInf8sY.8Li9i9Y72M9TEG', 0, 1701776631, 15);
 
 -- ************************************** `patient`
 DROP TABLE IF EXISTS `patient`;
@@ -596,17 +625,54 @@ INSERT INTO `pays` (`id_pays`, `code`, `alpha2`, `alpha3`, `nom_en_gb`, `nom_fr_
 
 
 DELIMITER $$
---
--- Évènements
---
-DROP EVENT IF EXISTS `update_passe`$$
-CREATE DEFINER=`root`@`localhost` EVENT `update_passe` ON SCHEDULE EVERY 1 DAY STARTS '2024-03-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+
+DROP EVENT IF EXISTS `update_passe` $$
+CREATE DEFINER=`thib`@'' EVENT `update_passe`
+ON SCHEDULE EVERY 1 DAY
+STARTS '2024-01-01 00:00:00'
+ENABLE
+DO
   UPDATE hospitalisation
   SET passe = 1
-  WHERE date < CURRENT_DATE;
+  WHERE `date` < CURRENT_DATE $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE TRIGGER `check_numSecu` 
+BEFORE INSERT ON `patient`
+FOR EACH ROW
+BEGIN
+    IF (SELECT COUNT(*) FROM `patient` WHERE `num_secu` = NEW.`num_secu`) > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ce numéro de sécurité sociale est déjà utilisé';
+    END IF;
 END$$
 
 DELIMITER ;
-COMMIT;
+
+
+DELIMITER $$
+
+CREATE TRIGGER check_id_poste_before_insert_medecin
+BEFORE INSERT ON medecin
+FOR EACH ROW
+BEGIN
+  DECLARE poste INT;
+  
+  SELECT id_poste INTO poste FROM salarie WHERE id_salarie = NEW.id_salarie;
+  IF poste != 15 THEN
+    SIGNAL SQLSTATE '45001' SET MESSAGE_TEXT = 'Le salarié est pas un médecin';
+  END IF;
+END$$
+
+DELIMITER ;
+
+
 
 SET GLOBAL event_scheduler="ON" 
+
+
+

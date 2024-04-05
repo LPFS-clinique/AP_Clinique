@@ -8,7 +8,7 @@ function executeInsertion($stmt)
 }
 
 
-$query= "INSERT INTO `salarie` (mail, nom_salarie, prenom_salarie, id_poste, id_civilite) VALUES (?, ?, ?, ?, ?)";
+$query= "INSERT INTO `salarie` (mail_s, nom_s, prenom_s, id_poste, id_civilite) VALUES (?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(1, $_POST['mail']);
 $stmt->bindParam(2, $_POST['nom_salarie']);
