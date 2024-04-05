@@ -6,12 +6,12 @@ if (!$conn) {
 
 
 // Informations de connexion à la base de données du serveur test 192.168.5.20
-function create_db()
-{
-    $servername = "localhost";
-    $username = "root";
-    $password = "root";
-    $dbname = "lpfs_cliniquebdd";
+//function create_db()
+//{
+   // $servername = "localhost";
+    //$username = "root";
+    //$password = "root";
+    //$dbname = "lpfs_cliniquebdd";
 
 // Informations de connexion à la base de données du serveur prod 192.168.5.21
 // function create_db()
@@ -23,12 +23,21 @@ function create_db()
 
 
 // Informations de connexion à la base de données du serveur localhost
+<<<<<<< HEAD
 // function create_db()
 // {
 //     $servername = "localhost";
 //     $username = "root";
 //     $password = "";
 //     $dbname = "test";
+=======
+function create_db()
+ {
+   $servername = "localhost";
+   $username = "root";
+    $password = "";
+    $dbname = "lpfs_cliniquebdd";
+>>>>>>> e32aeed20d4e90c78b0e3c62ebb58c07ab76b978
 
 
     try {

@@ -7,6 +7,15 @@ function executeInsertion($stmt)
     return $stmt->execute();
 }
 
+if (isset($_POST['add_button'])) {
+    $query= "INSERT INTO `salarie` (mail_s, nom_s, prenom_s, id_poste, id_civilite) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(1, $_POST['mail']);
+    $stmt->bindParam(2, $_POST['nom_salarie']);
+    $stmt->bindParam(3, $_POST['prenom_salarie']);
+    $stmt->bindParam(4, $_POST['id_poste']);
+    $stmt->bindParam(5, $_POST['id_civilite']);
+    $stmt->execute(); // Exécution de la requête
 
 $query= "INSERT INTO `salarie` (mail_s, nom_s, prenom_s, id_poste, id_civilite) VALUES (?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($query);
@@ -17,18 +26,17 @@ $stmt->bindParam(4, $_POST['id_poste']);
 $stmt->bindParam(5, $_POST['id_civilite']);
 $result_salarie = $stmt->fetchAll();
 
-$success = executeInsertion($stmt);
+    // Utilisation de l'identifiant dans la deuxième requête
+    $query= "INSERT INTO `medecin` (id_medecin, id_service, id_salarie) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(1, $_POST['id_medecin']);
+    $stmt->bindParam(2, $_POST['id_service']);
+    $stmt->bindParam(3, $lastInsertedId); // Utilisation de l'identifiant récupéré
+    $stmt->execute(); // Exécution de la deuxième requête
 
-$query= "INSERT INTO `medecin` (id_medecin, id_service, id_salarie) VALUES (?, ?, ?)";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(1, $_POST['id_medecin']);
-$stmt->bindParam(2, $_POST['id_service']);
-$stmt->bindParam(3, $_POST['id_salarie']);
-$result_medecin= $stmt->fetchAll();
-
-if (isset($_POST['delete_button2'])){
-    $nom_salarie = $_POST['nom_salarie'];
-    $query= "DELETE FROM `salarie` WHERE nom_salarie='$nom_salarie'";
+}elseif (isset($_POST['Delete'])){ var_dump($_POST);
+    $nom_s = $_POST['id_salarie'];
+    $query= "DELETE FROM `salarie` WHERE nom_s ='$nom_s'";
     $stmt = $conn->prepare($query);
     
    
@@ -38,14 +46,16 @@ if (isset($_POST['delete_button2'])){
 
     $success = executeInsertion($stmt);
 
-}else if (isset($_POST['update_button2'])){
-    $nom_service = $_POST['nom_service'];
-    $query= "UPDATE `services` SET nom_service='$nom_service'";
+//---------------------------------------------
+
+}else if (isset($_POST['Update'])){
+    $nom_s = $_POST['id_salarie'];
+    $query= "UPDATE `salarie` SET nom_s='$nom_s'";
     $stmt = $conn->prepare($query);
    
     echo "UPDATE";
 
-    $result_services = $stmt->fetchAll();
+    $result_salarie = $stmt->fetchAll();
 
     $success = executeInsertion($stmt);
 
@@ -65,4 +75,3 @@ if ($success) {
 
 
 ?>
-
