@@ -12,7 +12,7 @@ $id_civilite = $_POST['id_civilite'];
 $identifiant = strtolower($prenom_s[0]) . '.' . strtolower($nom_s);
 
 $mdp = $identifiant . ".azerty@123";
-$mdp = password_hash($identifiant, PASSWORD_DEFAULT);
+$mdp = password_hash($mdp, PASSWORD_DEFAULT);
 
 $premiereco = 0;
 $mdp_modif = time();
