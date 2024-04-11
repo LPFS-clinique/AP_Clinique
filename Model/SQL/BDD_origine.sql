@@ -136,7 +136,8 @@ INSERT INTO `poste` (`id_poste`, `nom_poste`) VALUES
 (14, 'Agent technique'),
 (15, 'Médecins'),
 (16, 'Infirmiers'),
-(17, 'Aides-soignants');
+(17, 'Aides-soignants'),
+(18, 'Secrétaire');
 
 
 -- ************************************** `documents`
@@ -257,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `connexion`
 (
  `id_connexion` int(3) NOT NULL AUTO_INCREMENT ,
  `identifiant`  varchar(40) NOT NULL ,
- `mdp`          varchar(30) NOT NULL ,
+ `mdp`          varchar(255) NOT NULL ,
  `premiere_co`  boolean NOT NULL ,
  `mdp_modif`    int NOT NULL ,
  `id_salarie`   int(3) NOT NULL ,
