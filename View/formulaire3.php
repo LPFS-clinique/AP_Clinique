@@ -1,5 +1,18 @@
 <?php
 session_start();
+$admin = array(3, 4, 5);
+$medecin = array(15, 16, 17);
+if ($_SESSION['id_poste'] != 18) {
+}else{
+    if  (in_array($_SESSION['id_poste'], $admin)) {
+    header('Location: ../View/pannel.php?permissionForm=denied');
+    exit;
+    }else {
+        header('Location: ../View/medecinpread.php/?permissionForm=denied');
+        exit;
+    }
+}
+
 
 $keys = array_keys($_POST);
 foreach ($keys as $input_name) {
