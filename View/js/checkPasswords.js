@@ -1,6 +1,5 @@
 let newPasswordInput = document.getElementById("newPassword");
 let repeatNewPasswordInput = document.getElementById("repeatNewPassword");
-let submitButton = document.getElementById("submitButton");
 let captchaInput = document.getElementById("captcha");
 
 let errorDiv = document.createElement("div");
@@ -46,24 +45,36 @@ function updatePasswordConditions(password) {
 
 function checkPasswords() {
   if (newPasswordInput.value !== repeatNewPasswordInput.value) {
-    submitButton.disabled = true;
-    errorDiv.innerText = "Les mots de passe ne correspondent pas.";
-    if (!document.getElementById("passwordError")) {
-      repeatNewPasswordInput.parentNode.appendChild(errorDiv);
-    }
-  } else {
-    submitButton.disabled = !isValidPassword(newPasswordInput.value);
-    if (document.getElementById("passwordError")) {
-      errorDiv.remove();
-    }
+    console.log("Les mots de passe ne correspondent pas.");
+    updatePasswordConditions(newPasswordInput.value);
+    return false;
   }
-  updatePasswordConditions(newPasswordInput.value);
+  return true;
 }
 
-captchaInput.addEventListener("input", function () {
-  submitButton.disabled =
-    this.value.length !== 5 || !isValidPassword(newPasswordInput.value);
-});
+function checkCaptcha() {
+  if (captchaInput.value.length === 5) {
+    console.log("Captcha valide.");
+    return true;
+  } else {
+    console.log("Captcha invalide.");
+    return false;
+  }
+}
 
-newPasswordInput.addEventListener("input", checkPasswords);
-repeatNewPasswordInput.addEventListener("input", checkPasswords);
+function updateSubmitButton() {
+  const isPasswordsValid = checkPasswords();
+  const isCaptchaValid = checkCaptcha();
+  const submitButton = document.getElementById("submitButton");
+  console.log("pwdvalid = " + isPasswordsValid);
+  console.log(isCaptchaValid);
+  if (isPasswordsValid && isCaptchaValid) {
+    submitButton.removeAttribute("disabled");
+  } else {
+    submitButton.setAttribute("disabled", "true");
+  }
+}
+
+newPasswordInput.addEventListener("input", updateSubmitButton);
+repeatNewPasswordInput.addEventListener("input", updateSubmitButton);
+captchaInput.addEventListener("input", updateSubmitButton);

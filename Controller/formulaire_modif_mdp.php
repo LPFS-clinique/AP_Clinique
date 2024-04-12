@@ -54,10 +54,16 @@ if (password_verify($oldPassword, $newHashedPassword)) {
                 WHERE id_connexion = :id_login";
     $stmt3 = $conn->prepare($query2);
 
+
     $stmt3->bindParam(':mdp_modif', $mdp_modif, PDO::PARAM_INT);
     $stmt3->bindParam(':id_login', $id_login, PDO::PARAM_INT);
 
-    if ($stmt2->execute() && $stmt3->execute()) {
+    $stmt4 = $conn->prepare("UPDATE connexion 
+                                SET premiere_co = 1 
+                                WHERE id_connexion = :id_login");
+    $stmt4->bindParam(':id_login', $id_login, PDO::PARAM_INT);
+
+    if ($stmt2->execute() && $stmt3->execute() && $stmt4->execute()) {
         $_SESSION['success'] = "Mot de passe mis à jour avec succès.";
         unset($_SESSION['id_login']);
         header('Location: ../View/index.php');
@@ -70,5 +76,6 @@ if (password_verify($oldPassword, $newHashedPassword)) {
     $stmt = null;
     $stmt2 = null;
     $stmt3 = null;
+    $stmt4 = null;
     $conn = null;
 }

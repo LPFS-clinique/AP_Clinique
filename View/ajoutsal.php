@@ -2,6 +2,11 @@
 require_once('../Model/config.php');
 global $conn;
 session_start();
+if ($_SESSION['id_poste'] != 1) {
+  header('Location: ../View/index.php?permission=denied');
+  exit;
+}
+
 
 $query = "Select * 
 FROM poste";

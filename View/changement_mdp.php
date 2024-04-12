@@ -15,7 +15,7 @@ if (!isset($_SESSION['id_login'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Changement de mot de passe</title>
     <link href="./css/output.css" rel="stylesheet">
-    <script defer src="JS/checkPasswords.js"></script>
+    <script defer src="/View/js/checkPasswords.js"></script>
 </head>
 
 <body class="bg-gray-200 py-10">
